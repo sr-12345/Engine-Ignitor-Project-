@@ -1,21 +1,3 @@
-"""Injector Sizing GUI.
-
-Sizes coaxial and impinging IPA / N2O injector orifices from user-entered flow
-parameters.
-
-- The N2O coaxial drill size accounts for the outer diameter of the IPA needle
-  sitting inside it (Coaxial_Drill_Diameter_Nitrous), so the drilled hole is
-  big enough for the required N2O flow area *plus* the needle's footprint.
-- Both a coaxial and an impinging (multi-orifice) result are shown for IPA and
-  N2O side by side.
-- Chamber and feed pressures also show a live bar readout next to the Pa entry.
-- Sensitivity plots (drill diameter vs Cd) are docked permanently on the right
-  side of the window and refresh in place every time Calculate is pressed.
-- Results (inputs + outputs) can be exported to a JSON file via File > Export.
-
-Run with:  python InjectorSizingGUI.py
-Requires:  numpy, matplotlib  (see requirements.txt)
-"""
 
 import json
 import time
