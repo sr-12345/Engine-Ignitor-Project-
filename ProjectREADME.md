@@ -24,3 +24,5 @@ Input validation with clear error messages (e.g. feed pressure must exceed chamb
 # Further Work and Improvements
 
 Sizing the IPA orifice and then determining the needle OD and then updating the tool to find the N2O orifice is inefficient, so having a set of known needle OD's for a variety of gauges would allow automatic calculation of the N2O orifice. The challenge is that for a given gauge of needle, different manufacturers achieve different OD's, so allowing the user to manually input their needle OD is safest albeit slow.
+
+Adding an "oficice type" dropdown menu to set the Cd to more realistic values would be useful. For example, sharp-edged orifice ≈ 0.6–0.65, drilled hole with L/D of 2–4 ≈ 0.7–0.8, chamfered or rounded entry ≈ 0.85–0.95.
