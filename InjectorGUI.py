@@ -21,7 +21,6 @@ from N2O import (
 APP_NAME = "Injector Sizing Input Interface"
 APP_VERSION = "1.1.0"
 
-# Each section is a list of (key, label, unit, default) tuples.
 CHAMBER_FIELDS = [
     ("P_c", "Chamber Pressure", "Pa", "2000000"),
     ("P_feedsystem", "IPA Feed System Pressure", "Pa", "3500000"),
@@ -50,13 +49,13 @@ GEOMETRY_FIELDS = [
 
 ALL_FIELDS = CHAMBER_FIELDS + IPA_FIELDS + N2O_FIELDS + GEOMETRY_FIELDS
 
-# Fields that must be whole numbers.
-INT_FIELDS = {"IPA_orifices", "N2O_orifices"}
 
-# Pressure fields that also get a live "≈ X bar" readout.
+INT_FIELDS = {"IPA_orifices", "N2O_orifices"} #integers
+
+
 PRESSURE_KEYS = {"P_c", "P_feedsystem", "P_feedsystem_N2O"}
 
-PA_PER_BAR = 1e5
+PA_PER_BAR = 1e5 #conversion factor
 
 
 class InjectorSizingApp:
@@ -75,9 +74,7 @@ class InjectorSizingApp:
         self._build_menu()
         self._build_layout()
 
-    # ------------------------------------------------------------------ #
-    # Styling / menu
-    # ------------------------------------------------------------------ #
+
     def _build_style(self):
         style = ttk.Style()
         try:
@@ -112,15 +109,13 @@ class InjectorSizingApp:
         self.root.config(menu=menu_bar)
         self.root.bind("<Control-e>", lambda e: self.on_export())
 
-    # ------------------------------------------------------------------ #
-    # Layout
-    # ------------------------------------------------------------------ #
+
     def _build_layout(self):
         self.root.columnconfigure(0, weight=0)
         self.root.columnconfigure(1, weight=1)
         self.root.rowconfigure(0, weight=1)
 
-        # --- Left side: scrollable input/results panel -------------------
+        #scrollable input/results panel
         left_container = ttk.Frame(self.root)
         left_container.grid(row=0, column=0, sticky="nsew")
         left_container.rowconfigure(0, weight=1)
@@ -166,7 +161,7 @@ class InjectorSizingApp:
         canvas.bind("<Enter>", _bind_wheel)
         canvas.bind("<Leave>", _unbind_wheel)
 
-        # --- Right side: docked plots -------------------------------------
+        # docked plots
         right = ttk.Frame(self.root, padding=(0, 16, 16, 16))
         right.grid(row=0, column=1, sticky="nsew")
         right.columnconfigure(0, weight=1)
@@ -206,7 +201,7 @@ class InjectorSizingApp:
             row=0, column=1, sticky="ew", padx=(6, 0)
         )
 
-        # --- Results panel --------------------------------------------------
+        #results panel
         results = ttk.Labelframe(left, text="Results", padding=12, style="Section.TLabelframe")
         results.grid(row=9, column=0, sticky="ew", pady=(0, 20))
         results.columnconfigure(0, weight=1)
@@ -253,7 +248,7 @@ class InjectorSizingApp:
             row=5, column=1, sticky="w"
         )
 
-        # Plot panel, docked permanently on the right, updated in place.
+        
         self._init_plot_area(right)
 
         self.root.bind("<Return>", lambda event: self.on_generate())
@@ -292,9 +287,7 @@ class InjectorSizingApp:
         except ValueError:
             self.bar_vars[key].set("")
 
-    # ------------------------------------------------------------------ #
-    # Actions
-    # ------------------------------------------------------------------ #
+
     def on_reset(self):
         for key, _, _, default in ALL_FIELDS:
             self.vars[key].set(default)
@@ -374,14 +367,11 @@ class InjectorSizingApp:
         try:
             needle_od_m = v["IPA_needle_OD_mm"] / 1000.0
 
-            # --- IPA: exact design-point results ---
             ipa_area_point = SPI(v["Cd_IPA"], v["m_dot_IPA"], v["Rho_IPA"], v["P_c"], v["P_feedsystem"])
             ipa_coax_point = Coaxial_IPA_Size(ipa_area_point)
             ipa_impinge_point = Impinging_IPA_Size(ipa_area_point, v["IPA_orifices"])
 
-            # --- N2O: exact design-point results ---
-            # Uses the N2O feed system pressure (not chamber pressure) as the
-            # upstream pressure for the choked-flow relation.
+
             n2o_area_point = ChokedNitrousAreaRequired(
                 v["m_dot_N2O"], v["Cd_N2O"], v["P_feedsystem_N2O"], v["Gamma_N2O"], v["R_N2O"], v["N2O_Temp"]
             )
@@ -395,7 +385,7 @@ class InjectorSizingApp:
                     "too close to feed pressure) - the choked-flow sizing model may not apply."
                 )
 
-            # --- Sensitivity curves vs Cd, for context ---
+
             ipa_cd_range = self._cd_sweep(v["Cd_IPA"])
             ipa_areas = SPI(ipa_cd_range, v["m_dot_IPA"], v["Rho_IPA"], v["P_c"], v["P_feedsystem"])
             ipa_coax_curve = Coaxial_IPA_Size(ipa_areas)
@@ -468,9 +458,7 @@ class InjectorSizingApp:
             "bipropellant rocket engine from user-supplied flow parameters.",
         )
 
-    # ------------------------------------------------------------------ #
-    # Plotting
-    # ------------------------------------------------------------------ #
+
     def _init_plot_area(self, parent):
         self.fig = Figure(figsize=(6, 7), dpi=100)
         self.ax1 = self.fig.add_subplot(2, 1, 1)

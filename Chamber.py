@@ -1,20 +1,16 @@
 
 #Sizes the combustion chamber and conical nozzle from the throat area (from
 #Engine.py), a characteristic length L*, and a contraction ratio.
-#
+
 #The chamber volume up to the throat is defined by L*:
 #   Vc = L* * At
 #L* is a propellant-dependent empirical number representing how much volume
 #the gas needs to finish burning before it reaches the throat (0.5-2 m is a
-#common range for small liquid engines - check references for your specific
-#propellants and injector design, and treat your first value as a starting
-#point to refine, not a known-good number).
+#common range for small liquid engines).
 #
 #That volume is split between a cylindrical section and the convergent cone
 #leading to the throat; the geometry below solves for the cylindrical length
 #once the cone's volume is subtracted off.
-#
-#Importing inputs and libraries
 
 from UserInputs import L_star, contraction_ratio, conv_half_angle_deg, nozzle_half_angle_deg
 import numpy as np
@@ -121,7 +117,7 @@ def SizeNozzle(At, epsilon, half_angle_deg=15.0):
 
 
 
-# Example run using the values in UserInputs.py, chained after Engine.py
+# Example using the values in UserInputs.py, chained after Engine.py
 
 if __name__ == "__main__":
 

@@ -174,7 +174,7 @@ def StayTime(L_star, cstar, R_gas, Tc):
 
 
 
-# Example run using the values in UserInputs.py
+#Example using the values in UserInputs.py
 
 if __name__ == "__main__":
 
